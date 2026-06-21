@@ -1,4 +1,4 @@
-# FUTURE_FS_02 – Client Lead Management System (Mini CRM)
+ Client Lead Management System (Mini CRM)
 
 <img width="1919" height="916" alt="image" src="https://github.com/user-attachments/assets/03783835-734c-4deb-ad85-713a04321b83" />
 <img width="1919" height="924" alt="image" src="https://github.com/user-attachments/assets/63aaccd0-9585-49f1-8033-4234f4472f79" />
