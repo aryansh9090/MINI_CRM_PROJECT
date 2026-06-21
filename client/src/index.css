@@ -1,0 +1,89 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+@import "tailwindcss";
+
+@theme {
+  --font-sans: 'Inter', system-ui, sans-serif;
+
+  --color-dark-bg: #0A0A0A;
+  --color-dark-sidebar: #141414;
+  --color-dark-card: #141414;
+  --color-dark-border: #1F1F1F;
+  --color-dark-hover: #1A1A1A;
+  --color-dark-input: #111111;
+
+  --color-accent: #84CC16;
+  --color-accent-hover: #65A30D;
+
+  --animate-fade-in: fade-in 0.5s ease-out;
+  --animate-slide-up: slide-up 0.3s ease-out;
+  --animate-slow-pulse: slow-pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-pulse-dot: pulse-dot 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+
+  @keyframes fade-in {
+    0% { opacity: 0; transform: translateY(8px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes slide-up {
+    0% { opacity: 0; transform: translateY(16px) scale(0.98); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  @keyframes slow-pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.03); }
+  }
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+}
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  body {
+    background-color: var(--color-dark-bg);
+    color: #f3f4f6;
+    -webkit-font-smoothing: antialiased;
+    font-family: var(--font-sans);
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #0F1117;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #2A2D3A;
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #3A3D4A;
+  }
+}
+
+@layer components {
+  .dark-input {
+    width: 100%;
+    padding: 0.625rem 1rem;
+    background-color: var(--color-dark-input);
+    border: 1px solid var(--color-dark-border);
+    border-radius: 0.5rem;
+    color: #f3f4f6;
+    outline: none;
+    transition: all 0.2s;
+  }
+  .dark-input::placeholder {
+    color: #6b7280;
+  }
+  .dark-input:focus {
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "name": "future-fs-02-root",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "cd server && npm start",
+    "build": "cd server && npm install"
+  }
+}
