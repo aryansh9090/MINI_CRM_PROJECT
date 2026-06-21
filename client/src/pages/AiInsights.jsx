@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import api from '../api';
-import Anthropic from '@anthropic-ai/sdk';
 import {
   BrainCircuit, RefreshCw, Zap, TrendingUp, Clock, CheckCircle2,
   AlertTriangle, Users, ArrowRight
@@ -85,59 +84,19 @@ const AiInsights = () => {
     };
   }, [leads]);
 
-  // ─── Claude Deep Analysis ───────────────────────
+  // ─── Claude Deep Analysis (via secure backend) ───────────────────────
   const generateInsights = async () => {
-    const apiKey = import.meta.env.VITE_ANTHROPIC_API_KEY;
-    if (!apiKey) {
-      setError('Missing VITE_ANTHROPIC_API_KEY in .env.local');
-      return;
-    }
-
     setLoading(true);
     setError('');
 
     try {
-      const anthropic = new Anthropic({
-        apiKey: apiKey,
-        dangerouslyAllowBrowser: true
-      });
-
-      const prompt = `You are a sharp CRM business advisor. Analyze these leads and provide actionable insights.
-
-Leads Data: ${JSON.stringify(leads)}
-
-Respond STRICTLY with a valid JSON object using this exact structure, with no markdown formatting around it:
-{
-  "pipelineHealth": "Overall summary of the pipeline health (2-3 sentences, be specific with numbers)",
-  "recommendations": ["Actionable recommendation 1", "Actionable recommendation 2", "Actionable recommendation 3", "Actionable recommendation 4"],
-  "leadsAnalysis": [
-    {
-      "id": "match the lead id exactly",
-      "healthScore": 8,
-      "behaviorSummary": "Short 1-line behavior summary",
-      "bestTimeToFollowUp": "e.g. Tuesday morning",
-      "suggestedAction": "Specific next action, e.g. Send pricing proposal"
-    }
-  ]
-}`;
-
-      const response = await anthropic.messages.create({
-        model: 'claude-3-5-sonnet-20241022',
-        max_tokens: 1024,
-        temperature: 0,
-        messages: [{ role: 'user', content: prompt }]
-      });
-
-      let jsonStr = response.content[0].text.trim();
-      if (jsonStr.startsWith('```json')) {
-        jsonStr = jsonStr.replace(/^```json/, '').replace(/```$/, '');
-      }
-
-      const parsed = JSON.parse(jsonStr);
-      setInsights(parsed);
+      // API key stays on the server — this call is safe
+      const res = await api.post('/aiinsights/analyze', { leads });
+      setInsights(res.data);
     } catch (err) {
       console.error(err);
-      setError(err.message || 'Failed to generate insights. Check console for details.');
+      const msg = err.response?.data?.message || err.message || 'Failed to generate insights.';
+      setError(msg);
     } finally {
       setLoading(false);
     }

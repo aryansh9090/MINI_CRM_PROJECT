@@ -61,9 +61,12 @@ Create a `.env` file inside the server directory:
 PORT=5000
 DB_HOST=localhost
 DB_USER=root
-DB_PASSWORD=your_password
+DB_PASSWORD=your_database_password
 DB_NAME=crm_db
-JWT_SECRET=your_secret_key
+JWT_SECRET=your_strong_random_secret_key
+ANTHROPIC_API_KEY=your_anthropic_api_key   # Required for AI Insights feature
+ADMIN_PASSWORD=your_strong_admin_password   # Required to run seed_admin.js
+CORS_ORIGIN=http://localhost:5173           # Set to your frontend URL in production
 ```
 
 Run the backend server:

@@ -5,7 +5,11 @@ const bcrypt = require('bcryptjs');
 async function checkAdmin() {
   try {
     const username = 'admin';
-    const password = process.env.ADMIN_PASSWORD || 'admin123';
+    const password = process.env.ADMIN_PASSWORD;
+    if (!password) {
+      console.error('ERROR: ADMIN_PASSWORD environment variable is not set.');
+      process.exit(1);
+    }
     
     const admin = await Admin.findByUsername(username);
     if (!admin) {
@@ -22,7 +26,7 @@ async function checkAdmin() {
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(password, salt);
       await pool.query('UPDATE admins SET password = ? WHERE username = ?', [hashedPassword, username]);
-      console.log(`Password has been reset to ${password === 'admin123' ? 'admin123 (default)' : '[custom]'}`);
+      console.log('Password has been reset to the value in ADMIN_PASSWORD env var.');
     }
     process.exit(0);
   } catch (err) {

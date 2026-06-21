@@ -5,7 +5,12 @@ const bcrypt = require('bcryptjs');
 async function seedAdmin() {
   try {
     const username = 'admin';
-    const password = process.env.ADMIN_PASSWORD || 'admin123';
+    const password = process.env.ADMIN_PASSWORD;
+    if (!password) {
+      console.error('ERROR: ADMIN_PASSWORD environment variable is not set. Refusing to seed with a default password.');
+      console.error('Please set ADMIN_PASSWORD in your .env file and re-run this script.');
+      process.exit(1);
+    }
     
     const admin = await Admin.findByUsername(username);
     if (admin) {
@@ -17,7 +22,7 @@ async function seedAdmin() {
     const hashedPassword = await bcrypt.hash(password, salt);
     
     await Admin.create(username, hashedPassword);
-    console.log(`Admin user seeded successfully with username admin and password ${password === 'admin123' ? 'admin123 (default)' : '[custom]'}`);
+    console.log(`Admin user seeded successfully with username: admin`);
     process.exit(0);
   } catch (err) {
     console.error('Error seeding admin:', err);
