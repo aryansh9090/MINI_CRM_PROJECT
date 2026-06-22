@@ -17,7 +17,14 @@ const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(cors({
-  origin: process.env.CORS_ORIGIN || '*',
+  origin: function (origin, callback) {
+    // Allow any localhost port for development or fallback to CORS_ORIGIN
+    if (!origin || origin.startsWith('http://localhost:')) {
+      callback(null, true);
+    } else {
+      callback(null, process.env.CORS_ORIGIN || '*');
+    }
+  },
   credentials: true
 }));
 app.use(express.json());
@@ -33,7 +40,7 @@ app.use('/api/aiinsights', require('./routes/aiinsights'));
 app.use(express.static(path.join(__dirname, '../client/dist')));
 
 // Handle React Router fallback
-app.get('*', (req, res) => {
+app.get(/^(.*)$/, (req, res) => {
   res.sendFile(path.join(__dirname, '../client/dist/index.html'));
 });
 
