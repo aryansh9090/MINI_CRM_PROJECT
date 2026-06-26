@@ -23,10 +23,15 @@ async function initDB() {
       queueLimit: 0
     });
     
-    await tempPool.query(`CREATE DATABASE IF NOT EXISTS \`${process.env.DB_NAME}\`;`);
+    try {
+      await tempPool.query(`CREATE DATABASE IF NOT EXISTS \`${process.env.DB_NAME}\`;`);
+      console.log(`Database '${process.env.DB_NAME}' ready.`);
+    } catch (dbCreateErr) {
+      // On managed MySQL (e.g. VibeNest), CREATE DATABASE may not be allowed.
+      // That's fine — the DB already exists. Just continue.
+      console.log(`Note: Could not CREATE DATABASE (managed MySQL). Continuing with existing DB.`);
+    }
     await tempPool.end();
-
-    console.log(`Database '${process.env.DB_NAME}' ready.`);
 
     // Now initialize tables using the main pool
     await pool.query(`
