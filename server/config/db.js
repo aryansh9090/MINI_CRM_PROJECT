@@ -62,6 +62,24 @@ async function initDB() {
     `);
 
     console.log('Tables initialized successfully.');
+
+    // ─── Auto-seed admin if none exists ──────────────────────────────────────
+    const [admins] = await pool.query('SELECT id FROM admins LIMIT 1');
+    if (admins.length === 0) {
+      const bcrypt = require('bcryptjs');
+      const adminPassword = process.env.ADMIN_PASSWORD || 'adminadmin1234';
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(adminPassword, salt);
+      await pool.query(
+        'INSERT INTO admins (username, password) VALUES (?, ?)',
+        ['admin', hashedPassword]
+      );
+      console.log('Auto-seeded admin user successfully.');
+    } else {
+      console.log('Admin user already exists, skipping seed.');
+    }
+    // ─────────────────────────────────────────────────────────────────────────
+
   } catch (error) {
     console.error('Error initializing database:', error.message);
     throw error;
