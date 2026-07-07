@@ -32,58 +32,7 @@ A full-stack Mini CRM application built with **React, Node.js, Express, and MySQ
 * bcryptjs
 * JSON Web Token (JWT)
 
-## Project Structure
-FUTURE_FS_02/
-├── client/     # React Frontend
-├── server/     # Node.js & Express Backend
-└── README.md
 
-## Installation & Setup
-
-### Prerequisites
-* Node.js
-* MySQL Server
-
-### Database Configuration
-Create a MySQL database:
-```sql
-CREATE DATABASE crm_db;
-```
-
-### Backend Setup
-```bash
-cd server
-npm install
-```
-
-Create a `.env` file inside the server directory:
-```env
-PORT=5000
-DB_HOST=localhost
-DB_USER=root
-DB_PASSWORD=your_database_password
-DB_NAME=crm_db
-JWT_SECRET=your_strong_random_secret_key
-ANTHROPIC_API_KEY=your_anthropic_api_key   # Required for AI Insights feature
-ADMIN_PASSWORD=your_strong_admin_password   # Required to run seed_admin.js
-CORS_ORIGIN=http://localhost:5173           # Set to your frontend URL in production
-```
-
-Run the backend server:
-```bash
-node server.js
-```
-
-### Frontend Setup
-```bash
-cd client
-npm install
-npm run dev
-```
-
-## Application Access
-* Frontend: http://localhost:5173
-* Backend API: http://localhost:5000
 
 ## Author
 Aryan Sharma
