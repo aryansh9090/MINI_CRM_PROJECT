@@ -51,8 +51,14 @@ async function initDB() {
         source VARCHAR(255) DEFAULT 'Website',
         status ENUM('New', 'Contacted', 'Converted') DEFAULT 'New',
         notes TEXT,
+        last_contacted_at TIMESTAMP NULL DEFAULT NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
+    `);
+
+    // Add last_contacted_at if it doesn't exist (fixes already-created production tables)
+    await pool.query(`
+      ALTER TABLE leads ADD COLUMN IF NOT EXISTS last_contacted_at TIMESTAMP NULL DEFAULT NULL;
     `);
 
     await pool.query(`
